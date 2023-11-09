@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class AppService {
     });
 
     const body = JSON.stringify({ image: img });
-    return this.http.post('http://localhost:3000/predict', body, {
+    return this.http.post(`${environment.apiUrl}/predict`, body, {
       headers: headers,
     });
   }

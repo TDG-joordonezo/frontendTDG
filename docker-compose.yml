@@ -1,0 +1,9 @@
+version: '3'
+services:
+  front-tdg:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    restart: on-failure
