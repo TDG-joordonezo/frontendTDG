@@ -1,14 +1,18 @@
 <div class="full-screen-canvas">
-  <video
-    #videoElement
-    [hidden]="!showVideo"
-    class="cover-video"
-  ></video>
-  <canvas #canvas2 width="240" height="320" style="display: none;"></canvas>
-  <button (click)="toggleCamera()" class="camera-switch-button position-btn">
-    <span class="icon">&#8635;</span> Cambiar cámara
-  </button>
-  <div class="styleResult {{color}}">
-    <p>{{prediction}}</p>
+  <div class="videoContainer">
+    <div class="countNum">{{ countDown }}</div>
+    <div class="">
+      <video #videoElement [hidden]="!showVideo" class="cover-video"></video>
+    </div>
+    <button (click)="toggleCamera()" class="camera-switch-button position-btn">
+      <span class="icon">&#8635;</span> Cambiar cámara
+    </button>
+    <div class="styleResult {{ color }}">
+      <p>{{ prediction }}</p>
+    </div>
+    <div class="rangeBar">
+      <input type="range" min="5" max="100" [value]="constDown" (change)="onRangeChange($event)" step="1" />
+    </div>
   </div>
+  <canvas #canvas2 width="240" height="320" style="display: none"></canvas>
 </div>

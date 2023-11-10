@@ -1,3 +1,7 @@
+body{
+  padding: 0;
+  margin: 0;
+}
 .full-screen-canvas {
     width: 100%;
     height: 100%;
@@ -14,7 +18,8 @@
   }
 
   .camera-switch-button {
-    background: linear-gradient(to bottom, #00adef, #006fbe);
+    position: relative;
+    background: linear-gradient(to bottom, #00adef, blue);
     color: white;
     border: none;
     border-radius: 50px;
@@ -22,6 +27,7 @@
     cursor: pointer;
     font-size: 16px;
     transition: background 0.3s;
+    z-index: 50;
   }
   
   .camera-switch-button:hover {
@@ -34,17 +40,21 @@
   }
 
   .position-btn{
-    position: relative;
-    top: -38%;
-    left: -50%;
+    top: 64%;
+    left: 3%;
   }
 
   .styleResult{
     position: relative;
-    top: 35%;
-    left: -50%;
-    font-size: 34px;
+    top: 49%;
+    left: 0%;
+    font-size: 210%;
     font-weight: 700;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
   }
   .green{
     color: green;
@@ -52,5 +62,353 @@
   .red{
     color: red;
   }
+
+  .countNum{
+    position: relative;
+    color: white;
+    font-size: 32px;
+    background-color: blue;
+    top: 29%;
+    left: 46%;
+    width: max-content;
+    min-width: 35px;
+    border-radius: 50%;
+    padding: 1%;
+    margin: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+  }
+  .rangeBar{
+    position: relative;
+    top: 45%;
+    left: 60%;
+    width: max-content;
+    z-index: 50;
+  }
+
+  .videoContainer {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
   
+  .cover-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  @media (min-width: 576px) { .full-screen-canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cover-video{
+    background-size: cover;
+  }
+
+  .camera-switch-button {
+    position: relative;
+    background: linear-gradient(to bottom, #00adef, blue);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 2px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    z-index: 50;
+  }
   
+  .camera-switch-button:hover {
+    background: linear-gradient(to bottom, #006fbe, #00adef);
+  }
+  
+  .icon {
+    font-size: 16px;
+    margin-right: 0px;
+  }
+
+  .position-btn{
+    top: 82%;
+    left: 3%;
+  }
+
+  .styleResult{
+    position: relative;
+    top: 64%;
+    left: 0%;
+    font-size: 210%;
+    font-weight: 700;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .green{
+    color: green;
+  }
+  .red{
+    color: red;
+  }
+
+  .countNum{
+    position: relative;
+    color: white;
+    font-size: 32px;
+    background-color: blue;
+    top: 9%;
+    left: 46%;
+    width: max-content;
+    min-width: 35px;
+    border-radius: 50%;
+    padding: 1%;
+    margin: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+  }
+  .rangeBar{
+    position: relative;
+    top: 59%;
+    left: 60%;
+    width: max-content;
+    z-index: 50;
+  }
+
+  .videoContainer {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .cover-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+  } }
+
+@media (min-width: 768px) {  }
+
+  @media (min-width: 992px) { .full-screen-canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cover-video{
+    background-size: cover;
+  }
+
+  .camera-switch-button {
+    position: relative;
+    background: linear-gradient(to bottom, #00adef, blue);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 2px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    z-index: 50;
+  }
+  
+  .camera-switch-button:hover {
+    background: linear-gradient(to bottom, #006fbe, #00adef);
+  }
+  
+  .icon {
+    font-size: 16px;
+    margin-right: 0px;
+  }
+
+  .position-btn{
+    top: 79%;
+    left: 16%;
+
+  }
+
+  .styleResult{
+    position: relative;
+    top: 67%;
+    left: 0%;
+    font-size: 210%;
+    font-weight: 700;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .green{
+    color: green;
+  }
+  .red{
+    color: red;
+  }
+
+  .countNum{
+    position: relative;
+    color: white;
+    font-size: 32px;
+    background-color: blue;
+    top: 0%;
+    left: 46%;
+    width: max-content;
+    min-width: 35px;
+    border-radius: 50%;
+    padding: 1%;
+    margin: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+  }
+  .rangeBar{
+    position: relative;
+    top: 56%;
+    left: 69%;
+    width: max-content;
+    z-index: 50;
+  }
+
+  .videoContainer {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .cover-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+  } }
+  
+  @media (min-width: 1200px) { .full-screen-canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cover-video{
+    background-size: cover;
+  }
+
+  .camera-switch-button {
+    position: relative;
+    background: linear-gradient(to bottom, #00adef, blue);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 2px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    z-index: 50;
+  }
+  
+  .camera-switch-button:hover {
+    background: linear-gradient(to bottom, #006fbe, #00adef);
+  }
+  
+  .icon {
+    font-size: 16px;
+    margin-right: 0px;
+  }
+
+  .position-btn{
+    top: 78%;
+    left: 23%;
+  }
+
+  .styleResult{
+    position: relative;
+    top: 66%;
+    left: 0%;
+    font-size: 210%;
+    font-weight: 700;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .green{
+    color: green;
+  }
+  .red{
+    color: red;
+  }
+
+  .countNum{
+    position: relative;
+    color: white;
+    font-size: 32px;
+    background-color: blue;
+    top: 0%;
+    left: 46%;
+    width: max-content;
+    min-width: 35px;
+    border-radius: 50%;
+    padding: 1%;
+    margin: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+  }
+  .rangeBar{
+    position: relative;
+    top: 55%;
+    left: 66%;
+    width: max-content;
+    z-index: 50;
+  }
+
+  .videoContainer {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .cover-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+  } }

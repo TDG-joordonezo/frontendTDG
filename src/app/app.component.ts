@@ -23,6 +23,9 @@ export class AppComponent implements OnInit, OnDestroy {
   videoConstraints: MediaStreamConstraints = { video: true };
   public prediction = '';
   public color = '';
+  public countDown = 15;
+  public constDown = 15;
+  private intervalCount: any;
   constructor(private appService: AppService) {}
 
   ngOnInit() {
@@ -32,11 +35,9 @@ export class AppComponent implements OnInit, OnDestroy {
   async startCamera() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
-        // Obtener la lista de dispositivos de video
         const devices = await navigator.mediaDevices.enumerateDevices();
         let videoDeviceId;
 
-        // Encontrar el dispositivo de video correcto
         for (const device of devices) {
           if (device.kind === 'videoinput') {
             videoDeviceId = device.deviceId;
@@ -44,7 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
           }
         }
 
-        // Configurar las restricciones de la cámara
         this.videoConstraints = { video: { deviceId: videoDeviceId } };
 
         const stream = await navigator.mediaDevices.getUserMedia(
@@ -55,7 +55,6 @@ export class AppComponent implements OnInit, OnDestroy {
           this.videoElement.nativeElement.srcObject = stream;
           this.videoElement.nativeElement.play();
         }
-        // Actualiza los canvas con la imagen de la cámara
         this.updateCanvas();
       } catch (error) {
         console.error('Error accessing the camera:', error);
@@ -66,6 +65,9 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleCamera() {
     this.showVideo = false;
     this.startCamera();
+    this.showVideo = true;
+    this.countDown = this.constDown;
+    clearInterval(this.intervalCount);
   }
 
   updateCanvas() {
@@ -73,19 +75,20 @@ export class AppComponent implements OnInit, OnDestroy {
     const ctx2 = canvas2?.getContext('2d');
 
     if (ctx2) {
-      setInterval(() => {
-        // Dibuja la imagen del video en el canvas 2 (240x320)
-        ctx2.drawImage(this.videoElement?.nativeElement, 0, 0, 240, 320);
-
-        // Llama a la función para enviar la imagen a la API de predicción
-        this.predictFromCanvas2(canvas2);
-      }, 1500); // Actualiza cada 100ms (ajusta según tus necesidades)
+     this.intervalCount = setInterval(() => {
+        if(this.countDown == 0){
+          ctx2.drawImage(this.videoElement?.nativeElement, 0, 0, 240, 320);
+          this.predictFromCanvas2(canvas2);
+          this.countDown = this.constDown;
+        }else{
+          this.countDown -= 1;
+        }
+      }, 1000);
     }
   }
 
   predictFromCanvas2(canvas: HTMLCanvasElement) {
-    const image = canvas.toDataURL('image/jpeg'); // Convierte el canvas a una imagen JPEG
-   console.log(image)
+    const image = canvas.toDataURL('image/jpeg');
     this.subscriptions.add(
       this.appService.predict(image).subscribe({
         next: (response:any) => {
@@ -101,6 +104,10 @@ export class AppComponent implements OnInit, OnDestroy {
         },
       })
     );
+  }
+
+  onRangeChange(event: Event): void {
+    this.constDown = parseInt((event.target as HTMLInputElement).value);
   }
 
   ngOnDestroy(): void {
