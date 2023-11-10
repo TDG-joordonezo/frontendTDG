@@ -62,6 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.videoElement.nativeElement.srcObject = stream;
                 this.videoElement.nativeElement.play();
               }
+              this.updateCanvas();
             } catch (videoError) {
               console.error('Error al acceder al video:', videoError);
   
@@ -119,12 +120,6 @@ export class AppComponent implements OnInit, OnDestroy {
     return result.isConfirmed ? videoDevices.find(device => device.deviceId === result.value) || null : null;
   }
   
-  
-  
-  
-  
-  
-  
   toggleCamera() {
     this.showVideo = false;
     this.startCamera();
@@ -132,7 +127,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.countDown = this.constDown;
     clearInterval(this.intervalCount);
   }
-  
 
   updateCanvas() {
     const canvas2 = this.canvas2?.nativeElement;
