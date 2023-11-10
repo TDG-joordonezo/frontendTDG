@@ -36,21 +36,41 @@ export class AppComponent implements OnInit, OnDestroy {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        let videoDeviceId;
-
+        let videoDeviceIds = [];
+  
         for (const device of devices) {
           if (device.kind === 'videoinput') {
-            videoDeviceId = device.deviceId;
-            break;
+            videoDeviceIds.push(device.deviceId);
           }
         }
-
-        this.videoConstraints = { video: { deviceId: videoDeviceId } };
-
+  
+        let nextDeviceId;
+  
+        if (
+          this.videoConstraints &&
+          typeof this.videoConstraints.video !== 'boolean' &&
+          this.videoConstraints.video &&
+          this.videoConstraints.video.deviceId !== undefined
+        ) {
+          if (typeof this.videoConstraints.video !== 'boolean') {
+            const deviceId: string | ConstrainDOMString = this.videoConstraints.video.deviceId;
+  
+            if (typeof deviceId === 'string') {
+              const currentIndex = videoDeviceIds.indexOf(deviceId);
+              const nextIndex = (currentIndex + 1) % videoDeviceIds.length;
+              nextDeviceId = videoDeviceIds[nextIndex];
+            }
+          }
+        } else {
+          nextDeviceId = videoDeviceIds[0];
+        }
+  
+        this.videoConstraints = { video: { deviceId: { exact: nextDeviceId } } };
+  
         const stream = await navigator.mediaDevices.getUserMedia(
           this.videoConstraints
         );
-
+  
         if (this.videoElement) {
           this.videoElement.nativeElement.srcObject = stream;
           this.videoElement.nativeElement.play();
@@ -61,7 +81,9 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }
   }
-
+  
+  
+  
   toggleCamera() {
     this.showVideo = false;
     this.startCamera();
@@ -69,6 +91,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.countDown = this.constDown;
     clearInterval(this.intervalCount);
   }
+  
 
   updateCanvas() {
     const canvas2 = this.canvas2?.nativeElement;
