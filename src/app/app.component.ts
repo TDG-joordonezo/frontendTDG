@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { AppService } from './services/app.service';
 import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-root',
@@ -33,54 +35,93 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async startCamera() {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices && navigator.mediaDevices.getUserMedia) {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        let videoDeviceIds = [];
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
   
-        for (const device of devices) {
-          if (device.kind === 'videoinput') {
-            videoDeviceIds.push(device.deviceId);
+        if (videoDevices.length > 0) {
+          let userSelectedDevice;
+  
+          if (videoDevices.length === 1) {
+            userSelectedDevice = videoDevices[0];
+            console.log('Se seleccionó automáticamente la única cámara disponible:', userSelectedDevice.label);
+          } else {
+            userSelectedDevice = await this.promptUserForCamera(videoDevices);
           }
-        }
   
-        let nextDeviceId;
+          if (userSelectedDevice) {
+            const constraints: MediaStreamConstraints = {
+              video: { deviceId: { exact: userSelectedDevice.deviceId } }
+            };
   
-        if (
-          this.videoConstraints &&
-          typeof this.videoConstraints.video !== 'boolean' &&
-          this.videoConstraints.video &&
-          this.videoConstraints.video.deviceId !== undefined
-        ) {
-          if (typeof this.videoConstraints.video !== 'boolean') {
-            const deviceId: string | ConstrainDOMString = this.videoConstraints.video.deviceId;
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia(constraints);
   
-            if (typeof deviceId === 'string') {
-              const currentIndex = videoDeviceIds.indexOf(deviceId);
-              const nextIndex = (currentIndex + 1) % videoDeviceIds.length;
-              nextDeviceId = videoDeviceIds[nextIndex];
+              if (this.videoElement) {
+                this.videoElement.nativeElement.srcObject = stream;
+                this.videoElement.nativeElement.play();
+              }
+            } catch (videoError) {
+              console.error('Error al acceder al video:', videoError);
+  
+              console.warn('Intentando obtener una corriente de video sin restricciones.');
+              const unrestrictedStream = await navigator.mediaDevices.getUserMedia({ video: true });
+  
+              if (this.videoElement) {
+                this.videoElement.nativeElement.srcObject = unrestrictedStream;
+                this.videoElement.nativeElement.play();
+              }
             }
+          } else {
+            console.error('No se seleccionó ninguna cámara.');
           }
         } else {
-          nextDeviceId = videoDeviceIds[0];
+          console.error('No se encontraron cámaras disponibles.');
         }
-  
-        this.videoConstraints = { video: { deviceId: { exact: nextDeviceId } } };
-  
-        const stream = await navigator.mediaDevices.getUserMedia(
-          this.videoConstraints
-        );
-  
-        if (this.videoElement) {
-          this.videoElement.nativeElement.srcObject = stream;
-          this.videoElement.nativeElement.play();
-        }
-        this.updateCanvas();
       } catch (error) {
-        console.error('Error accessing the camera:', error);
+        console.error('Error al enumerar dispositivos:', error);
       }
     }
   }
+  
+  
+
+  async promptUserForCamera(videoDevices: MediaDeviceInfo[]): Promise<MediaDeviceInfo | null> {
+    if (videoDevices.length === 1) {
+      console.log('Se seleccionó automáticamente la única cámara disponible:', videoDevices[0].label);
+      return videoDevices[0];
+    }
+  
+    const options = videoDevices.reduce((acc:any, device:any) => {
+      acc[device.deviceId] = device.label || 'Cámara sin etiqueta';
+      return acc;
+    }, {});
+  
+    const result = await Swal.fire({
+      title: 'Selecciona una cámara',
+      input: 'select',
+      inputOptions: options,
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value) {
+            const selectedDevice = videoDevices.find(device => device.deviceId === value);
+            console.log('Cámara seleccionada:', selectedDevice?.label);
+            resolve();
+          } else {
+            resolve('Debes seleccionar una cámara');
+          }
+        });
+      }
+    });
+  
+    return result.isConfirmed ? videoDevices.find(device => device.deviceId === result.value) || null : null;
+  }
+  
+  
+  
+  
   
   
   
