@@ -135,7 +135,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (ctx2) {
      this.intervalCount = setInterval(() => {
         if(this.countDown == 0){
-          ctx2.drawImage(this.videoElement?.nativeElement, 0, 0, 240, 320);
+          ctx2.drawImage(this.videoElement?.nativeElement, 0, 0, 336, 336);
           this.predictFromCanvas2(canvas2);
           this.countDown = this.constDown;
         }else{
